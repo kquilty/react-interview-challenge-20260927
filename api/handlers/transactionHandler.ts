@@ -44,6 +44,11 @@ export const withdrawal = async (accountID: string, amount: number) => {
         throw new Error("Transaction failed");
     }
 
+    await query(
+        `INSERT INTO withdrawals (account_number, amount) VALUES ($1, $2)`,
+        [accountID, amount]
+    );
+
     return account;
 }
 
