@@ -10,6 +10,19 @@ export const withdrawal = async (accountID: string, amount: number) => {
     if (amount % 5 !== 0) {
         throw new Error("Withdrawals must be a multiple of $5.");
     }
+    
+
+    // Limit to $400 per day
+    const q = await query(`
+        SELECT COALESCE(SUM(amount), 0) AS total
+        FROM withdrawals
+        WHERE account_number = $1 AND created_at >= CURRENT_DATE`,
+        [accountID]
+    );
+    if (Number(q.rows[0].total) + amount > 400) {
+        throw new Error("You can only withdraw up to $400 per day.");
+    }
+
     if (account.type === "credit") {
         // Note that credit balances are NEGATIVE (so the lowest allowed balance is -credit_limit)
         if (account.amount - amount < -account.credit_limit) {
