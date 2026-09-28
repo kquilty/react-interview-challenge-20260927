@@ -1,4 +1,5 @@
 -- CREATE TABLE
+DROP TABLE IF EXISTS withdrawals;
 DROP TABLE IF EXISTS accounts;
 CREATE TABLE accounts (
     account_number INTEGER PRIMARY KEY,
@@ -10,6 +11,14 @@ CREATE TABLE accounts (
 
 ALTER TABLE accounts ADD CONSTRAINT verify_type
 CHECK (type IN ('checking', 'savings', 'credit'));
+
+-- Withdrawal history (to enforce the daily withdrawal limit)
+CREATE TABLE withdrawals (
+    id SERIAL PRIMARY KEY,
+    account_number INTEGER NOT NULL REFERENCES accounts(account_number),
+    amount INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
 -- LOAD DATAS
 INSERT INTO accounts 
