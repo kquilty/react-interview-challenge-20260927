@@ -23,6 +23,10 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     }
     const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/deposit`, requestOptions);
     const data = await response.json();
+    if (!response.ok) {
+      alert(data.error);
+      return;
+    }
     setAccount({
       accountNumber: data.account_number,
       name: data.name,
@@ -40,6 +44,10 @@ export const AccountDashboard = (props: AccountDashboardProps) => {
     }
     const response = await fetch(`http://localhost:3000/transactions/${account.accountNumber}/withdraw`, requestOptions);
     const data = await response.json();
+    if (!response.ok) {
+      alert(data.error);
+      return;
+    }
     setAccount({
       accountNumber: data.account_number,
       name: data.name,
