@@ -5,7 +5,7 @@ import { deposit, withdrawal } from "../handlers/transactionHandler";
 const router = express.Router();
 
 const transactionSchema: Schema = Joi.object({
-    amount: Joi.number().required(),
+    amount: Joi.number().integer().positive().required(),
 });
 
 router.put("/:accountID/withdraw", async (request: Request, response: Response) => {
